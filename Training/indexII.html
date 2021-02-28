@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title>This is a test for healthcare</title>
+  <link href='base.css' rel='stylesheet' />
+  </head>
+<body>
+  <article>
+    <button id='getunicom' onclick='InitialGet("S2021211",1)'>Initial Get</button>
+  </article>
+
+  <article class="gender">
+      <div class='questiontext'>
+        What is your gender
+        </div>
+    <div class='options'>
+      <input id='male' type="radio" /><label for='male'>Male</label>
+      <input id='female' type="radio" /><label for='female'>Female</label>
+      </div>
+      <div class='response'>
+
+        </div>
+        <button id='GenderSubmit' class='submit'>Submit</button>
+  </article>
+
+  <article class="rating">
+      <div class='questiontext'>
+        <label for='rating'>On a scale of 1 to 5, how great was this? </label>
+        </div>
+      <div class='response'>
+        <input id='rating' class='ratingresponse' / >
+        </div>
+        <button class='submit'>Submit</button>
+  </article>
+
+  <article class="comments">
+      <div class='questiontext'>
+        <label for='comments'>Generally, what did you think?</label>
+        </div>
+      <div class='response'>
+        <textarea id='comments' name="comments" rows="8" cols="80"></textarea>
+        </div>
+        <button class='submit'>Submit</button>
+  </article>
+  <article class='test'>
+    <button id='testGet' class='testbuttons'>Test GET</button>
+    <button id='testRequest' class='testbuttons'>Test REQUEST</button>
+    <button id='testResponse' class='testbuttons'>Test RESPONSE</button>
+  </article>
+  </body>
+  <script src="unicom.js">//Unicom core code</script>
+  <script src="test.js">//Unicom core code</script>
+</html>

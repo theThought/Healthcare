@@ -1,0 +1,70 @@
+article
+{
+  margin: 10px;
+  padding: 5px;
+}
+
+.testbuttons
+{
+  width: 15em;
+  height: 1.7rem;
+  padding:2px;
+  margin:5px;
+}
+
+@media only screen and (max-width: 3000px)
+{
+.mainform
+{
+  display:grid;
+  grid-template-columns: 400px 400px;
+  justify-content:flex-start;
+
+}
+}
+
+@media only screen and (max-width: 1000px)
+{
+.mainform
+{
+  display:grid;
+  grid-template-columns: 400px 400px;
+  justify-content: space-between;
+
+}
+}
+
+
+@media only screen and (max-width: 800px)
+{
+.mainform
+{
+  display:grid;
+  grid-template-columns: 400px;
+}
+}
+
+.sidebox
+{
+  border: solid 1pt grey;
+  min-width: 350px;
+}
+
+.comments
+{
+  width:80%;
+}
+
+.multichoicelist
+{
+    height: 9rem;
+}
+
+body
+{
+  font-size: 14pt;
+}
+option
+{
+  padding:3px;
+}

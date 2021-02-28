@@ -1,0 +1,88 @@
+<html>
+
+<head>
+  <title>This is a test for healthcare</title>
+  <link href='base.css' rel='stylesheet' />
+</head>
+
+<body>
+  <article>
+    <button id='getunicom'>Initial Get</button>
+  </article>
+  <div class='mainform'>
+    <article class='leftside sidebox'>
+      <article class="gender">
+        <div class='questiontext'>
+          What is your gender
+        </div>
+        <div class='options'>
+          <input id='male' class='genderoptions' type="radio" name='genderoptions' /><label for='male'>Male</label>
+          <input id='female' class='genderoptions' type="radio" name='genderoptions' /><label for='female'>Female</label>
+        </div>
+        <div class='response'>
+
+        </div>
+      <!--  <button id='GenderSubmit' class='submit testbuttons'>Submit</button> -->
+      </article>
+
+      <article class="rating">
+        <div class='questiontext'>
+          <label for='rating'>On a scale of 1 to 5, how great was this? </label>
+        </div>
+        <div class='response'>
+          <input id='rating' class='ratingresponse' />
+        </div>
+      </article>
+
+      <article class="comments">
+        <div class='questiontext'>
+          <label for='comments'>Generally, what did you think?</label>
+        </div>
+        <div class='response'>
+          <textarea id='comments' name="comments" rows="8" class='comments'></textarea>
+        </div>
+      </article>
+
+      <article class='prettybuttons'>
+        <button id='FormSubmit' class='testbuttons'>Submit</button>
+      </article>
+    </article>
+
+    <article class='rightside sidebox'>
+      <article class='multiplechoices'>
+        <label for='multichoicelist'>Pick which you have experienced</label>
+        <br />
+        <select id='multichoicelist' class='multichoicelist' multiple='multiple'>
+        <option value='option1'>this is option 1</option>
+        <option value='option2'>this is option 2</option>
+        <option value='option3'>this is option 3</option>
+        <option value='option4'>this is option 4</option>
+        <option value='option5'>this is option 5</option>
+        <option value='option6'>this is option 6</option>
+      </select>
+      </article>
+      <article class='singlechoice'>
+        <label for='singlechoiceinput'>Pick your favourite</label>
+        <select id='singlechoiceinput' class='singlechoicelist'/>
+          <option value='option0'>pick one option</option>
+          <option value='option1'>this is option 1</option>
+          <option value='option2'>this is option 2</option>
+          <option value='option3'>this is option 3</option>
+          <option value='option4'>this is option 4</option>
+          <option value='option5'>this is option 5</option>
+          <option value='option6'>this is option 6</option>
+        </select>
+      </article>
+      <article class='prettybuttons'>
+        <button id='FormSubmit2' class='testbuttons'>Submit</button>
+      </article>
+    </article>
+  </div>
+
+
+</body>
+<script src="dimensions.js">
+  //Unicom core code
+</script>
+
+</html>

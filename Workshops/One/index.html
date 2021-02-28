@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+  <html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="base.css" />
+
+
+
+    <!-- ios support -->
+    <link rel="apple-touch-icon" href="icons/icon-72x72.png" />
+    <link rel="apple-touch-icon" href="icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" href="icons/icon-128x128.png" />
+    <link rel="apple-touch-icon" href="icons/icon-144x144.png" />
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-384x384.png" />
+    <link rel="apple-touch-icon" href="icons/icon-512x512.png" />
+    <meta name="apple-mobile-web-app-status-bar" content="#db4938" />
+    <meta name="theme-color" content="#db4938" />
+
+    <title>Workshop 1</title>
+
+  </head>
+
+  <body>
+    <div id='existingrecords' class='existingrecordstable'>
+      <div id='titlerow' class='titlerow'>
+        <div class='columntitle' id='producttitle'>
+          Product
+        </div>
+        <div class='columntitle' id='TotalDosage'>
+          Total Daily Dosage
+        </div>
+        <div class='columntitle' id='DosageUnit'>
+          Dosage Unit
+        </div>
+        <div class='columntitle' id='Route'>
+          Route
+        </div>
+      </div>
+      <div class='DataRows'>
+
+      </div>
+      <div class='DataRowTemplate notvisible'>
+        <div class='columnentry productentry' id='newproduct'>
+
+        </div>
+        <div class='columnentry totaldosageentry' id='newtotaldosage'>
+
+        </div>
+        <div class='columnentry dosageunitentry' id='newunit'>
+
+        </div>
+        <div class='columnentry routeentry' id='newroute'>
+
+        </div>
+      </div>
+      <div class='notesandbuttons'>
+      </div>
+    </div>
+    <div id='currentrecord' class='currentrecorddialog'>
+    </div>
+    <div>
+    </div>
+  </body>
+  <script type="text/javascript" src='healthcare.js'>// healthcare namespace</script>
+  <script type="text/javascript" src='Unicom.js'>// healthcare namespace</script>
+  <script type="text/javascript" src='UX.js'>// healthcare namespace</script>
+  <script type="text/javascript" src='Dosage.js'>// healthcare namespace</script>
+  </html>
