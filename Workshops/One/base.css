@@ -4,39 +4,42 @@ article
   padding: 5px;
 }
 
-@media only screen and (max-width: 800px)
-{
 .existingrecordstable
 {
   display:grid;
-  grid-template-columns: 400px;
+  grid-template-rows: 1.5rem auto;
+  justify-content: space-between;
 }
+
+@media only screen and (max-width: 800px)
+{
+  .existingrecordstable
+  {
+    grid-template-columns: 75%;
+  }
 }
 
 @media only screen and (max-width: 1000px)
 {
-.existingrecordstable
+  .existingrecordstable
 {
-  display:grid;
-  grid-template-columns: 400px 400px;
-  justify-content: space-between;
-
+  grid-template-columns: 40% 40%;
 }
 }
 
 @media only screen and (max-width: 3000px)
 {
-.existingrecordstable
+  .existingrecordstable
 {
-  display:grid;
-  grid-template-columns: 400px 400px 400px 400px;
-  justify-content:flex-start;
-
+  grid-template-columns: 20% 20% 20% 20%;
 }
 }
 
-
-
+.notvisible
+{
+  visibility: hidden;
+  display:none;
+}
 
 body
 {
