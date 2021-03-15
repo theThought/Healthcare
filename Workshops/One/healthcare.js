@@ -18,6 +18,12 @@ hcNS.Core = class {
     }
   }
 
+  // constants
+
+  // private variables
+
+  // private functions
+
   ReadQueryString () {
     const query = window.location.search.substring(1)
     const variables = query.split('&')
@@ -43,16 +49,13 @@ hcNS.Core = class {
     if (theDetails.id !== '') this.ConnectionDetails.id = theDetails.id
     else this.ConnectionDetails.id = '0000-5555-0000-0001'
   }
-  // constants
-
-  // private variables
-
-  // private functions
 
   // event handlers
   onInitialGetComplete () {
     myApp.UX.UpdateSessionPanel(myApp.Unicom.SessionVariables)
   }
+
+  // methods:
 }
 
 var myApp

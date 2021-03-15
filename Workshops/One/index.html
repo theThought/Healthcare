@@ -1,90 +1,113 @@
 <!DOCTYPE html>
-  <html>
+<html>
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="base.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link type="text/css" rel="stylesheet" href="base.css" />
 
 
+  <!-- ios support -->
+  <link rel="apple-touch-icon" href="icons/icon-72x72.png" />
+  <link rel="apple-touch-icon" href="icons/icon-96x96.png" />
+  <link rel="apple-touch-icon" href="icons/icon-128x128.png" />
+  <link rel="apple-touch-icon" href="icons/icon-144x144.png" />
+  <link rel="apple-touch-icon" href="icons/icon-152x152.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-384x384.png" />
+  <link rel="apple-touch-icon" href="icons/icon-512x512.png" />
+  <meta name="apple-mobile-web-app-status-bar" content="#db4938" />
+  <meta name="theme-color" content="#db4938" />
 
-    <!-- ios support -->
-    <link rel="apple-touch-icon" href="icons/icon-72x72.png" />
-    <link rel="apple-touch-icon" href="icons/icon-96x96.png" />
-    <link rel="apple-touch-icon" href="icons/icon-128x128.png" />
-    <link rel="apple-touch-icon" href="icons/icon-144x144.png" />
-    <link rel="apple-touch-icon" href="icons/icon-152x152.png" />
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
-    <link rel="apple-touch-icon" href="icons/icon-384x384.png" />
-    <link rel="apple-touch-icon" href="icons/icon-512x512.png" />
-    <meta name="apple-mobile-web-app-status-bar" content="#db4938" />
-    <meta name="theme-color" content="#db4938" />
+  <title>Workshop 1</title>
 
-    <title>Workshop 1</title>
+</head>
 
-  </head>
-
-  <body>
-    <article id='unicomstatus'>
-      <div class='statuslabel'>
-        status:
-      </div>
-      <div id='sessionstatus' class='statusvalue'></div>
-      <div class='statuslabel'>
-        Session id:
-      </div>
-      <div id='statussession' class='statusvalue'>
-
-      </div>
-      <div class='statuslabel'>
-        Engine id:
-      </div>
-      <div id='statusengine' class='statusvalue'>
-
-      </div>
-    </article>
-
-    <article id='existingrecords' class='existingrecordstable'>
-      <div class='columntitle' id='producttitle'>
-        Product
-      </div>
-      <div class='columntitle' id='TotalDosage'>
-        Total Daily Dosage
-      </div>
-      <div class='columntitle' id='DosageUnit'>
-        Dosage Unit
-      </div>
-      <div class='columntitle' id='Route'>
-        Route
-      </div>
+<body>
+  <article id="unicomstatus">
+    <div class="statuslabel">
+      status:
     </div>
-    <div id='rowtemplate' class='notivisible'>
-      <div class='columnentry productentry' id='newproduct'>
+    <div id="sessionstatus" class="statusvalue"></div>
+    <div class="statuslabel">
+      Session id:
+    </div>
+    <div id="statussession" class="statusvalue">
 
-      </div>
-      <div class='columnentry totaldosageentry' id='newtotaldosage'>
+    </div>
+    <div class="statuslabel">
+      Engine id:
+    </div>
+    <div id="statusengine" class="statusvalue">
 
-      </div>
-      <div class='columnentry dosageunitentry' id='newunit'>
+    </div>
+  </article>
 
-      </div>
-      <div class='columnentry routeentry' id='newroute'>
-
-      </div>
+  <article id="existingrecords" class="existingrecordstable">
+    <div class="columntitle" id="producttitle">
+      Product
+    </div>
+    <div class="columntitle" id="TotalDosage">
+      Total Daily Dosage
+    </div>
+    <div class="columntitle" id="DosageUnit">
+      Dosage Unit
+    </div>
+    <div class="columntitle" id="Route">
+      Route
     </div>
 
-    <div class='notesandbuttons'>
-    </div>
+    <div id="rowtemplate" class="notivisible">
+      <div class="columnentry productentry" id="newproduct">
+
+      </div>
+      <div class="columnentry totaldosageentry" id="newtotaldosage">
+
+      </div>
+      <div class="columnentry dosageunitentry" id="newunit">
+
+      </div>
+      <div class="columnentry routeentry" id="newroute">
+
+      </div>
     </div>
 
-    <div id='currentrecord' class='currentrecorddialog'>
+    <div class="notesandbuttons">
     </div>
-    <div>
-    </article>
-  </body>
-  <script type="text/javascript" src='healthcare.js'>// healthcare namespace</script>
-  <script type="text/javascript" src='Unicom.js'>// healthcare namespace</script>
-  <script type="text/javascript" src='UX.js'>// healthcare namespace</script>
-  <script type="text/javascript" src='Dosage.js'>// healthcare namespace</script>
-  </html>
+
+    <div id="currentrecord" class="currentrecorddialog">
+    </div>
+  </article>
+  <article id="basictests">
+    <span><label for="actiontype">Type</label></span>
+    <select id="actiontype">
+      <option value="question">Question</option>
+      <option value="Page">Question</option>
+    </select>
+    <select id="actionask">
+      <option value="ask">Ask</option>
+      <option value="show">Show</option>
+    </select>
+    <span><label for="actionname">Name</label></span>
+    <input id="actionname" />
+    <span><label for="actionparam">Parameters</label></span>
+    <input id="actionparam" />
+    <button id="TestAction">Test</button>
+  </article>
+
+
+  <script type="text/javascript" src="healthcare.js">
+    // healthcare namespace
+  </script>
+  <script type="text/javascript" src="Unicom.js">
+    // healthcare namespace
+  </script>
+  <script type="text/javascript" src="UX.js">
+    // healthcare namespace
+  </script>
+  <script type="text/javascript" src="Dosage.js">
+    // healthcare namespace
+  </script>
+</body>
+</html>

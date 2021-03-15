@@ -7,7 +7,8 @@ hcNS.Unicom = class {
     this.ConnectionDetails = { server: '', project: '', test: '', id: '' }
     this.SessionVariables = { project: null, engine: null, savepoint: null, session: null, renderer: null }
     this.lastXMLResponse = null
-    this.xmlTemplates = {}
+    this.xmlTemplates = { requestquestionfromidle: null }
+    this.LoadXMLTemplates()
   }
 
   // Properties
@@ -33,7 +34,44 @@ hcNS.Unicom = class {
     this.ReadFormInputs(theHTML)
   }
 
+  onXMLRequestResponse (theResponse) {
+    switch (theResponse.status) {
+      case 200:
+        return theResponse.text()
+      default:
+        console.log('there was a response errror when requesting xml')
+        return null
+    }
+  }
+
+  onXMLRequestParse (xmlText) {
+    var xmlContent
+    if (xmlText === null) return null
+
+    try {
+      xmlContent = new window.DOMParser().parseFromString(xmlText, 'text/xml')
+    } catch (theError) {
+      console.log('the html did not parse correctly')
+      return null
+    }
+    this.xmlTemplates.requestquestionfromidle = xmlContent
+  }
+
+  onXMLRequestError (theError) {
+    console.log('something went horribly wrong with requesting xml')
+    console.log(theError)
+  }
   // Methods
+
+  LoadXMLTemplates () {
+    fetch ('RequestQuestion.xml', {
+      method: 'GET'
+    })
+      .then(response => this.onXMLRequestResponse(response))
+      .then(xmlText => this.onXMLRequestParse(xmlText))
+      .catch(error => this.onXMLRequestError(error))
+  }
+
   SetupConnection (theConnectionDetails) {
     if (theConnectionDetails.server === undefined || theConnectionDetails.project === undefined || theConnectionDetails.test === undefined || theConnectionDetails.id === undefined) return false
 
@@ -78,5 +116,39 @@ hcNS.Unicom = class {
         }
       }
     }
+  }
+
+  RequestActionFromIdle (theDetails) {
+    // { type: 'Question', name: 'QuestionName', parameters: false, after: NextFuction }
+    const whatsNextJSON = this.BuildWhatsNextforBasicRequest(theDetails.name, theDetails.parameters)
+    this.BuildBodyForRequestFromIdle(whatsNextJSON)
+  }
+
+  BuildWhatsNextforBasicRequest (theQuestion, theDoAsk) {
+  // {"WhatsNext":[{"Action":"Question","Name":"Gender","Parameters":""}]}
+    const jsonWhatsNext = { WhatsNext: [{ Action: 'Question', Name: '', Parameters: '' }] }
+    jsonWhatsNext.WhatsNext[0].Name = theQuestion
+    jsonWhatsNext.WhatsNext[0].Parameters = theDoAsk
+    console.log('JSON: ' + JSON.stringify(jsonWhatsNext))
+    return JSON.stringify(jsonWhatsNext)
+  }
+
+  BuildBodyForRequestFromIdle (theWhatsNextJSON) {
+    const root = this.xmlTemplates.requestquestionfromidle.documentElement
+    const newNode = root.cloneNode(true)
+
+    newNode.setAttribute('Project', this.ConnectionDetails.project)
+    const questionNodes = newNode.getElementsByTagName('Question')
+    const howManyQuestionNodes = questionNodes.length
+    for (var counter = 0; counter < howManyQuestionNodes; counter++) {
+      const currentNode = questionNodes[counter]
+      const questionName = currentNode.getAttribute('QuestionName')
+      if (questionName === 'WhatsNext') {
+        const responseNode = currentNode.childNodes[0]
+        const valueNode = responseNode.childNodes[0]
+        valueNode.textContent = theWhatsNextJSON
+      }
+    }
+    return newNode
   }
 }

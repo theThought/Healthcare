@@ -1,8 +1,10 @@
 /* global hcNS */
 
 hcNS.UX = class {
-  constructor () {
+  constructor (theParent) {
+    this.Parent = theParent
     console.log('UX Constructor')
+    this.SetupEventHandlers()
   }
 
   // constants
@@ -10,8 +12,30 @@ hcNS.UX = class {
   // private variables
 
   // private functions
-
+  SetupEventHandlers () {
+    var currentTag = document.getElementById('TestAction')
+    currentTag.addEventListener('click', this.onTestActionClick)
+  }
   // event handlers
+
+  onTestActionClick (theEvent) {
+    var instructions = { type: null, name: null, parameters: null, after: null }
+    var currentTag = document.getElementById('actiontype')
+    instructions.type = currentTag.value
+
+    currentTag = document.getElementById('actionname')
+    instructions.name = currentTag.value
+
+    currentTag = document.getElementById('actionask')
+    instructions.parameter = (currentTag.value === 'ask')
+
+    instructions.after = this.onTestActionEnd()
+    this.Parent.Unicom.RequestActionFromIdle(instructions)
+  }
+
+  onTestActionEnd () {
+    window.alert('Test Action Completed')
+  }
 
   // Methods
   UpdateSessionPanel (theSessionVariables) {
