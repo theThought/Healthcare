@@ -42,7 +42,7 @@ hcNS.Unicom = class {
     return true
   }
 
-  InitialGet () {
+  InitialGet (theAfterAction) {
     console.log('start initial get')
     const fullURL = this.ConnectionDetails.server + '?i.project=' + this.ConnectionDetails.project + '&i.test=' + this.ConnectionDetails.test + '&i.renderer=xmlplayer' + '&ID=' + this.ConnectionDetails.id
     fetch(fullURL, {
@@ -50,5 +50,34 @@ hcNS.Unicom = class {
     })
       .then(response => this.onResponse(response))
       .then(html => this.onReceiveGet(html))
+      .then(html => theAfterAction(html))
+  }
+
+  ReadFormInputs (theHTML) {
+    var xmlContent
+    try {
+      xmlContent = new window.DOMParser().parseFromString(theHTML, 'text/xml')
+    } catch (theError) {
+      console.log('the html did not parse correctly')
+      return null
+    }
+
+    const formTags = xmlContent.getElementsByTagName('form')
+    const onlyForm = formTags[0]
+    const inputTags = onlyForm.getElementsByTagName('input')
+    const howManyInputTags = inputTags.length
+
+    for (var counter = 0; counter < howManyInputTags; counter++) {
+      const currentInput = inputTags[counter]
+      const currentName = currentInput.getAttribute('name')
+      const currentValue = currentInput.getAttribute('value')
+
+      if (currentName !== null) {
+        if (currentName.substring(0, 2) === 'I.') {
+          const currentRealName = currentName.substring(2).toLowerCase()
+          this.SessionDetails[currentRealName] = currentValue
+        }
+      }
+    }
   }
 }
