@@ -31,12 +31,11 @@ hcNS.Unicom = class {
   onReceiveGet (theHTML) {
     console.log('now grab information from Get')
     this.ReadFormInputs(theHTML)
-    this.LoadTab(0)
   }
 
   // Methods
   SetupConnection (theConnectionDetails) {
-    if (theConnectionDetails.server !== undefined || theConnectionDetails.project !== undefined || theConnectionDetails.test !== undefined || theConnectionDetails.id !== undefined) return false
+    if (theConnectionDetails.server === undefined || theConnectionDetails.project === undefined || theConnectionDetails.test === undefined || theConnectionDetails.id === undefined) return false
 
     this.ConnectionDetails = theConnectionDetails
     return true
@@ -75,7 +74,7 @@ hcNS.Unicom = class {
       if (currentName !== null) {
         if (currentName.substring(0, 2) === 'I.') {
           const currentRealName = currentName.substring(2).toLowerCase()
-          this.SessionDetails[currentRealName] = currentValue
+          this.SessionVariables[currentRealName] = currentValue
         }
       }
     }

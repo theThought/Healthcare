@@ -11,8 +11,7 @@ hcNS.Core = class {
 
     // sample url: https://media.ipsosinteractive.com/kevin.gray/healthcare/workshopone/index.html?Project=xxx&test=1&id=0000-5555-0000-0001
     this.ReadQueryString()
-    if (this.Unicom.SetupConnection(this.ConnectionDetails) !== true)
-    {
+    if (this.Unicom.SetupConnection(this.ConnectionDetails) !== true) {
       console.log('Unicom connection not setup correctly')
     } else {
       this.Unicom.InitialGet(this.onInitialGetComplete)
@@ -30,8 +29,8 @@ hcNS.Core = class {
         if (nameValuePair[1].indexOf('[') > -1) this.PageVariables[nameValuePair[0].toLowerCase()] = JSON.parse(nameValuePair[1])
         else pageVariables[nameValuePair[0].toLowerCase()] = nameValuePair[1]
       }
-      this.DefineConnectionDetails(pageVariables)
     }
+    this.DefineConnectionDetails(pageVariables)
   }
 
   DefineConnectionDetails (theDetails) {
@@ -52,14 +51,13 @@ hcNS.Core = class {
 
   // event handlers
   onInitialGetComplete () {
-    console.log('initial Get Completed')
-    var currentStatusDiv = document.getElementById('sessionstatus')
-    if (currentStatusDiv !== null) currentStatusDiv.textContent = ''
-
-    currentStatusDiv = document.getElementById('sessionid')
-    if (currentStatusDiv !== null) currentStatusDiv.textContent = ''
-
-    currentStatusDiv = document.getElementById('sessionengine')
-    if (currentStatusDiv !== null) currentStatusDiv.textContent = ''
+    myApp.UX.UpdateSessionPanel(myApp.Unicom.SessionVariables)
   }
+}
+
+var myApp
+document.addEventListener('DOMContentLoaded', GetStarted)
+
+function GetStarted (theEvent) {
+  myApp = new hcNS.Core()
 }

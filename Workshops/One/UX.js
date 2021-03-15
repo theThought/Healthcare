@@ -12,11 +12,20 @@ hcNS.UX = class {
   // private functions
 
   // event handlers
-}
 
-var myApp
-document.addEventListener('DOMContentLoaded', GetStarted)
+  // Methods
+  UpdateSessionPanel (theSessionVariables) {
+    console.log('setup panel')
+    var currentStatusDiv = document.getElementById('sessionstatus')
+    if (currentStatusDiv !== null) {
+      if (theSessionVariables.session !== '') currentStatusDiv.textContent = 'Connected'
+      else currentStatusDiv.textContent = 'disconnected'
+    }
 
-function GetStarted (theEvent) {
-  myApp = new hcNS.Core()
+    currentStatusDiv = document.getElementById('statussession')
+    if (currentStatusDiv !== null) currentStatusDiv.textContent = theSessionVariables.session
+
+    currentStatusDiv = document.getElementById('statusengine')
+    if (currentStatusDiv !== null) currentStatusDiv.textContent = theSessionVariables.engine
+  }
 }
