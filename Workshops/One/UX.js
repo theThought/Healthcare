@@ -14,27 +14,29 @@ hcNS.UX = class {
   // private functions
   SetupEventHandlers () {
     var currentTag = document.getElementById('TestAction')
-    currentTag.addEventListener('click', this.onTestActionClick)
+    currentTag.addEventListener('click', () => this.onTestActionClick())
+
   }
   // event handlers
 
   onTestActionClick (theEvent) {
-    var instructions = { type: null, name: null, parameters: null, after: null }
+    var instructions = { type: null, name: null, parameters: null, source: this, after: null }
     var currentTag = document.getElementById('actiontype')
     instructions.type = currentTag.value
 
     currentTag = document.getElementById('actionname')
-    instructions.name = currentTag.value
+    if (currentTag.value !== '') instructions.name = currentTag.value
+    else instructions.name = 'Idle'
 
     currentTag = document.getElementById('actionask')
-    instructions.parameter = (currentTag.value === 'ask')
+    instructions.parameters = (currentTag.value === 'ask')
 
-    instructions.after = this.onTestActionEnd()
+    instructions.after = this.onTestActionEnd
     this.Parent.Unicom.RequestActionFromIdle(instructions)
   }
 
-  onTestActionEnd () {
-    window.alert('Test Action Completed')
+  onTestActionEnd (theSource, theLastXML) {
+    theSource.UpdateResponseText(theLastXML)
   }
 
   // Methods
@@ -51,5 +53,10 @@ hcNS.UX = class {
 
     currentStatusDiv = document.getElementById('statusengine')
     if (currentStatusDiv !== null) currentStatusDiv.textContent = theSessionVariables.engine
+  }
+
+  UpdateResponseText (theLastXML) {
+    const responseInput = document.getElementById('xmlResponse')
+    responseInput.textContent = theLastXML
   }
 }

@@ -5,9 +5,9 @@ hcNS.Core = class {
     console.log('Healthcare core constructor')
 
     this.ConnectionDetails = { server: 'https://corsstaging.ipsosinteractive.com/mriWeb/mriWeb.dll', project: '', test: '', id: '' }
-    this.Unicom = new hcNS.Unicom()
-    this.Dosage = new hcNS.Dosage()
-    this.UX = new hcNS.UX()
+    this.Unicom = new hcNS.Unicom(this)
+    this.Dosage = new hcNS.Dosage(this)
+    this.UX = new hcNS.UX(this)
 
     // sample url: https://media.ipsosinteractive.com/kevin.gray/healthcare/workshopone/index.html?Project=xxx&test=1&id=0000-5555-0000-0001
     this.ReadQueryString()
@@ -32,7 +32,7 @@ hcNS.Core = class {
       for (let counter = 0; counter < variables.length; counter++) {
         const nameValuePair = variables[counter].split('=')
 
-        if (nameValuePair[1].indexOf('[') > -1) this.PageVariables[nameValuePair[0].toLowerCase()] = JSON.parse(nameValuePair[1])
+        if (nameValuePair[1].indexOf('[') > -1) pageVariables[nameValuePair[0].toLowerCase()] = JSON.parse(nameValuePair[1])
         else pageVariables[nameValuePair[0].toLowerCase()] = nameValuePair[1]
       }
     }

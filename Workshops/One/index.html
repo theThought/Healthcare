@@ -25,36 +25,18 @@
 </head>
 
 <body>
-  <article id="unicomstatus">
-    <div class="statuslabel">
-      status:
-    </div>
-    <div id="sessionstatus" class="statusvalue"></div>
-    <div class="statuslabel">
-      Session id:
-    </div>
-    <div id="statussession" class="statusvalue">
-
-    </div>
-    <div class="statuslabel">
-      Engine id:
-    </div>
-    <div id="statusengine" class="statusvalue">
-
-    </div>
-  </article>
 
   <article id="existingrecords" class="existingrecordstable">
-    <div class="columntitle" id="producttitle">
+    <div class="columntitle statuslabel" id="producttitle">
       Product
     </div>
-    <div class="columntitle" id="TotalDosage">
+    <div class="columntitle statuslabel" id="TotalDosage">
       Total Daily Dosage
     </div>
-    <div class="columntitle" id="DosageUnit">
+    <div class="columntitle statuslabel" id="DosageUnit">
       Dosage Unit
     </div>
-    <div class="columntitle" id="Route">
+    <div class="columntitle statuslabel" id="Route">
       Route
     </div>
 
@@ -80,21 +62,47 @@
     </div>
   </article>
   <article id="basictests">
-    <span><label for="actiontype">Type</label></span>
+    <span><label for="actiontype" class="statuslabel">Type</label></span>
     <select id="actiontype">
       <option value="question">Question</option>
       <option value="Page">Question</option>
     </select>
+    <span><label for="actionask" class="statuslabel">Ask/Show</label></span>
     <select id="actionask">
       <option value="ask">Ask</option>
       <option value="show">Show</option>
     </select>
-    <span><label for="actionname">Name</label></span>
+    <span><label for="actionname" class="statuslabel">Name</label></span>
     <input id="actionname" />
-    <span><label for="actionparam">Parameters</label></span>
+    <span><label for="actionparam" class="statuslabel">Parameters</label></span>
     <input id="actionparam" />
     <button id="TestAction">Test</button>
   </article>
+  <article>
+    <textarea id="xmlResponse" placeholder="Last XML response" readonly rows="5"></textarea>
+  </article>
+  <footer>
+    <article id="unicomstatus">
+      <span class="statuslabel">
+        status:
+      </span>
+      <span id="sessionstatus" class="statusvalue"></span>
+      <span class="statuslabel">
+        Session id:
+      </span>
+      <span id="statussession" class="statusvalue">
+
+      </span>
+      <span class="statuslabel">
+        Engine id:
+      </span>
+      <span id="statusengine" class="statusvalue">
+
+      </span>
+    </article>
+  </footer>
+
+
 
 
   <script type="text/javascript" src="healthcare.js">

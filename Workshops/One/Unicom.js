@@ -1,12 +1,13 @@
 /* global hcNS fetch */
 
 hcNS.Unicom = class {
-  constructor () {
+  constructor (theParent) {
     console.log('Unicom constructor')
-
+    this.Parent = theParent
     this.ConnectionDetails = { server: '', project: '', test: '', id: '' }
     this.SessionVariables = { project: null, engine: null, savepoint: null, session: null, renderer: null }
     this.lastXMLResponse = null
+    this.lastXMLResponseString = null
     this.xmlTemplates = { requestquestionfromidle: null }
     this.LoadXMLTemplates()
   }
@@ -27,6 +28,31 @@ hcNS.Unicom = class {
         console.log('unicom did not respond properly')
         return null
     }
+  }
+
+  onResponseParse (theText) {
+    if (theText === null) return false
+
+    console.log('Request Response')
+    console.log(theText)
+    try {
+      this.lastXMLResponseString = theText
+      this.LastXMLResponse = new window.DOMParser().parseFromString(theText, 'text/xml')
+    } catch (theError) {
+      console.log('The XML response is not valid')
+      return false
+    }
+    return true
+  }
+
+  onResponseNextStep (theValidation, theSource, theNextAction) {
+    console.log('ready to perform next action')
+    theNextAction(theSource, this.lastXMLResponseString)
+  }
+
+  onResponseError (theError) {
+    console.log('something went wrong talking to Unicom')
+    console.log(theError)
   }
 
   onReceiveGet (theHTML) {
@@ -121,7 +147,31 @@ hcNS.Unicom = class {
   RequestActionFromIdle (theDetails) {
     // { type: 'Question', name: 'QuestionName', parameters: false, after: NextFuction }
     const whatsNextJSON = this.BuildWhatsNextforBasicRequest(theDetails.name, theDetails.parameters)
-    this.BuildBodyForRequestFromIdle(whatsNextJSON)
+    const bodyXML = this.BuildBodyForRequestFromIdle(whatsNextJSON)
+
+    // I.Engine={{EngineID}}&I.Session={{SessionID}}&I.Project=S2021211&I.SavePoint=Idle&I.Renderer=XMLPlayer&PlayerXml=
+    const bodyContent = [
+      'I.Engine=',
+      this.SessionVariables.engine,
+      '&I.Session=',
+      this.SessionVariables.session,
+      '&I.Project=',
+      this.ConnectionDetails.project,
+      '&I.SavePoint=Idle&I.Renderer=XMLPlayer&PlayerXml=',
+      encodeURIComponent(bodyXML),
+      '%0D%0A%09%09%09'
+    ].join('')
+
+    fetch(this.ConnectionDetails.server,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: bodyContent
+      })
+      .then(response => this.onResponse(response))
+      .then(xmlText => this.onResponseParse(xmlText))
+      .then(isValid => this.onResponseNextStep(isValid, theDetails.source, theDetails.after))
+      .catch(error => this.onResponseError(error))
   }
 
   BuildWhatsNextforBasicRequest (theQuestion, theDoAsk) {
@@ -149,6 +199,12 @@ hcNS.Unicom = class {
         valueNode.textContent = theWhatsNextJSON
       }
     }
-    return newNode
+    const serializer = new XMLSerializer()
+    console.log('Request XML: ' + serializer.serializeToString(newNode))
+    return serializer.serializeToString(newNode)
+  }
+
+  BuildFinalForRequestFromIdle () {
+
   }
 }

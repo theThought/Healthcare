@@ -1,8 +1,10 @@
 /* global hcNS */
 
 hcNS.Dosage = class {
-  constructor () {
+  constructor (theParent) {
+    this.Parent = theParent
     console.log('Dosage Constructor')
+
   }
   // constants
 
