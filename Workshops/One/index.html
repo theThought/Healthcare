@@ -27,6 +27,7 @@
 <body>
 
   <article id="existingrecords" class="existingrecordstable">
+    <div class='dosageheadings'>      
     <div class="columntitle statuslabel" id="producttitle">
       Product
     </div>
@@ -39,7 +40,11 @@
     <div class="columntitle statuslabel" id="Route">
       Route
     </div>
+  </div>
 
+    <button class="NewDosageButton">
+      Add New Dosage
+    </button>
     <div id="rowtemplate" class="notivisible">
       <div class="columnentry productentry" id="newproduct">
 
@@ -79,7 +84,19 @@
     <button id="TestAction">Test</button>
   </article>
   <article>
-    <textarea id="xmlResponse" placeholder="Last XML response" readonly rows="5"></textarea>
+    <div id="transactionlist">
+      <header class="transactiondetails">
+      <span class="transactionheadercell statuslabel">When</span><span class="transactionheadercell statuslabel">SavePoint</span>
+      </header>
+      <div id="transactiondetails" class="transactionarea">
+      </div>
+      <div id="transactiontemplate" class="transactiondetails transactionrow notvisible">
+        <span class="detailtime statusvalue"></span>
+        <span class="detailsavepoint statusvalue"></span>
+        <textarea class="detailxml notvisible"></textarea>
+      </div>
+    </div>
+    <textarea id="xmlInsert" readonly placeholder="the xml response"></textarea>
   </article>
   <footer>
     <article id="unicomstatus">

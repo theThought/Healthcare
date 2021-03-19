@@ -6,8 +6,8 @@ hcNS.Unicom = class {
     this.Parent = theParent
     this.ConnectionDetails = { server: '', project: '', test: '', id: '' }
     this.SessionVariables = { project: null, engine: null, savepoint: null, session: null, renderer: null }
-    this.lastXMLResponse = null
-    this.lastXMLResponseString = null
+    this.LastXMLResponse = null
+    this.LastXMLResponseString = null
     this.xmlTemplates = { requestquestionfromidle: null }
     this.LoadXMLTemplates()
   }
@@ -36,7 +36,7 @@ hcNS.Unicom = class {
     console.log('Request Response')
     console.log(theText)
     try {
-      this.lastXMLResponseString = theText
+      this.LastXMLResponseString = theText
       this.LastXMLResponse = new window.DOMParser().parseFromString(theText, 'text/xml')
     } catch (theError) {
       console.log('The XML response is not valid')
@@ -47,7 +47,7 @@ hcNS.Unicom = class {
 
   onResponseNextStep (theValidation, theSource, theNextAction) {
     console.log('ready to perform next action')
-    theNextAction(theSource, this.lastXMLResponseString)
+    theNextAction(theSource, this.LastXMLResponse)
   }
 
   onResponseError (theError) {
@@ -170,6 +170,7 @@ hcNS.Unicom = class {
       })
       .then(response => this.onResponse(response))
       .then(xmlText => this.onResponseParse(xmlText))
+      .then((isValid) => this.Parent.UX.onTransactionLogUpdate(isValid, this.LastXMLResponse))
       .then(isValid => this.onResponseNextStep(isValid, theDetails.source, theDetails.after))
       .catch(error => this.onResponseError(error))
   }
