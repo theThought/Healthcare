@@ -8,7 +8,7 @@ hcNS.Unicom = class {
     this.SessionVariables = { project: null, engine: null, savepoint: null, session: null, renderer: null }
     this.LastXMLResponse = null
     this.LastXMLResponseString = null
-    this.xmlTemplates = { requestquestionfromidle: null }
+    this.xmlTemplates = { requestquestionfromidle: null, submitresponsefromaction: null }
     this.LoadXMLTemplates()
   }
 
@@ -70,7 +70,7 @@ hcNS.Unicom = class {
     }
   }
 
-  onXMLRequestParse (xmlText) {
+  onXMLRequestParse (xmlText, theSlot) {
     var xmlContent
     if (xmlText === null) return null
 
@@ -80,7 +80,7 @@ hcNS.Unicom = class {
       console.log('the html did not parse correctly')
       return null
     }
-    this.xmlTemplates.requestquestionfromidle = xmlContent
+    theSlot = xmlContent
   }
 
   onXMLRequestError (theError) {
@@ -90,11 +90,20 @@ hcNS.Unicom = class {
   // Methods
 
   LoadXMLTemplates () {
+    var xmlTemplateSlot = this.xmlTemplates.requestquestionfromidle
     fetch ('RequestQuestion.xml', {
       method: 'GET'
     })
       .then(response => this.onXMLRequestResponse(response))
-      .then(xmlText => this.onXMLRequestParse(xmlText))
+      .then(xmlText => this.onXMLRequestParse(xmlText, xmlTemplateSlot))
+      .catch(error => this.onXMLRequestError(error))
+
+    xmlTemplateSlot = this.xmlTemplates.submitresponsefromaction
+    fetch ('SubmitQuestion.xml', {
+      method: 'GET'
+    })
+      .then(response => this.onXMLRequestResponse(response))
+      .then(xmlText => this.onXMLRequestParse(xmlText, xmlTemplateSlot))
       .catch(error => this.onXMLRequestError(error))
   }
 
@@ -205,7 +214,55 @@ hcNS.Unicom = class {
     return serializer.serializeToString(newNode)
   }
 
-  BuildFinalForRequestFromIdle () {
+  SubmitResponseForAction (theInstructions) {
+    // { type: 'Question', name: 'QuestionName', parameters: false, after: NextFuction }
+    const whatsNextJSON = this.BuildWhatsNextforBasicRequest('idle', true)
+    const bodyXML = this.BuildBodyForSubmissionFromAction(theInstructions, whatsNextJSON)
 
+    // I.Engine={{EngineID}}&I.Session={{SessionID}}&I.Project=S2021211&I.SavePoint=Idle&I.Renderer=XMLPlayer&PlayerXml=
+    const bodyContent = [
+      'I.Engine=',
+      this.SessionVariables.engine,
+      '&I.Session=',
+      this.SessionVariables.session,
+      '&I.Project=',
+      this.ConnectionDetails.project,
+      '&I.SavePoint=Idle&I.Renderer=XMLPlayer&PlayerXml=',
+      encodeURIComponent(bodyXML),
+      '%0D%0A%09%09%09'
+    ].join('')
+
+    fetch(this.ConnectionDetails.server,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: bodyContent
+      })
+      .then(response => this.onResponse(response))
+      .then(xmlText => this.onResponseParse(xmlText))
+      .then((isValid) => this.Parent.UX.onTransactionLogUpdate(isValid, this.LastXMLResponse))
+      .then(isValid => this.onResponseNextStep(isValid, theInstructions))
+      .catch(error => this.onResponseError(error))
+  }
+
+  BuildBodyForSubmissionFromAction (theInstructions, theWhatsNextJSON) {
+    const root = this.xmlTemplates.requestquestionfromidle.documentElement
+    const newNode = root.cloneNode(true)
+
+    newNode.setAttribute('Project', this.ConnectionDetails.project)
+    const questionNodes = newNode.getElementsByTagName('Question')
+    const howManyQuestionNodes = questionNodes.length
+    for (var counter = 0; counter < howManyQuestionNodes; counter++) {
+      const currentNode = questionNodes[counter]
+      const questionName = currentNode.getAttribute('QuestionName')
+      if (questionName === 'WhatsNext') {
+        const responseNode = currentNode.childNodes[0]
+        const valueNode = responseNode.childNodes[0]
+        valueNode.textContent = theWhatsNextJSON
+      }
+    }
+    const serializer = new XMLSerializer()
+    console.log('Request XML: ' + serializer.serializeToString(newNode))
+    return serializer.serializeToString(newNode)
   }
 }

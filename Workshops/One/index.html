@@ -27,7 +27,7 @@
 <body>
 
   <article id="existingrecords" class="existingrecordstable">
-    <div class='dosageheadings'>      
+    <div class='dosageheadings'>
     <div class="columntitle statuslabel" id="producttitle">
       Product
     </div>
@@ -67,19 +67,21 @@
     </div>
   </article>
   <article id="basictests">
-    <span><label for="actiontype" class="statuslabel">Type</label></span>
+    <span><label for="actiontype" class="statuslabel">Type:</label></span>
     <select id="actiontype">
       <option value="question">Question</option>
       <option value="Page">Question</option>
     </select>
-    <span><label for="actionask" class="statuslabel">Ask/Show</label></span>
+    <span><label for="actionask" class="statuslabel">Ask/Show:</label></span>
     <select id="actionask">
       <option value="ask">Ask</option>
       <option value="show">Show</option>
     </select>
-    <span><label for="actionname" class="statuslabel">Name</label></span>
+    <span><label for="actionname" class="statuslabel">Name:</label></span>
     <input id="actionname" />
-    <span><label for="actionparam" class="statuslabel">Parameters</label></span>
+    <span><label for="actionresponse" class="statuslabel">Response:</label></span>
+    <input id="actionresponse" />
+    <span><label for="actionparam" class="statuslabel">Parameters:</label></span>
     <input id="actionparam" />
     <button id="TestAction">Test</button>
   </article>
