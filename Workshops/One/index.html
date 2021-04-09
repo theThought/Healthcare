@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <link type="text/css" rel="stylesheet" href="base.css" />
+  <link type="text/css" rel="stylesheet" href="dosage.css" />
 
 
   <!-- ios support -->
@@ -27,7 +28,7 @@
 <body>
 
   <article id="existingrecords" class="existingrecordstable">
-    <div class='dosageheadings'>
+    <div class="dosageheadings">
     <div class="columntitle statuslabel" id="producttitle">
       Product
     </div>
@@ -42,9 +43,12 @@
     </div>
   </div>
 
-    <button class="NewDosageButton">
+    <button id="NewDosageButton" class="NewDosageButton">
       Add New Dosage
     </button>
+    <div id="ExistingDosages">
+
+    </div>
     <div id="rowtemplate" class="notivisible">
       <div class="columnentry productentry" id="newproduct">
 
@@ -62,11 +66,27 @@
 
     <div class="notesandbuttons">
     </div>
-
-    <div id="currentrecord" class="currentrecorddialog">
-    </div>
   </article>
-  <article id="basictests">
+  <div id="DosageModal" class="DosageModal ModalPosition">
+    <div class="ModalTitle">
+      New Dosage
+    </div>
+    <div class="DosageForm">
+      <label for="DosageProducts">Products</label><select id="DosageProducts"></select>
+      <label for="DosageUnits">Units</label><select id="DosageUnits"></select>
+      <label for="DosageRoutes">Routes</label><select id="DosageRoutes"></select>
+      <label for="DosageValue">Dose</label><input id="DosageValue" placeholder=""/>
+      <datalist id="DosageValueList">
+      </datalist>
+    </div>
+    <div class="DosageNavigation">
+      <button id="dosagemodalcancel">Cancel</button>
+      <button id="dosagemodalok">ok</button>
+
+    </div>
+  </div>
+
+  <article id="basictests" class="basictests">
     <span><label for="actiontype" class="statuslabel">Type:</label></span>
     <select id="actiontype">
       <option value="question">Question</option>
@@ -83,7 +103,7 @@
     <input id="actionresponse" />
     <span><label for="actionparam" class="statuslabel">Parameters:</label></span>
     <input id="actionparam" />
-    <button id="TestAction">Test</button>
+    <button id="TestAction" class="testaction">Test</button>
   </article>
   <article>
     <div id="transactionlist">

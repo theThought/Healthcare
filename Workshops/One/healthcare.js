@@ -5,12 +5,13 @@ hcNS.Core = class {
     console.log('Healthcare core constructor')
 
     this.ConnectionDetails = { server: 'https://corsstaging.ipsosinteractive.com/mriWeb/mriWeb.dll', project: '', test: '', id: '' }
+    this.UX = new hcNS.UX(this)
     this.Unicom = new hcNS.Unicom(this)
     this.Dosage = new hcNS.Dosage(this)
-    this.UX = new hcNS.UX(this)
 
     // sample url: https://media.ipsosinteractive.com/kevin.gray/healthcare/workshopone/index.html?Project=xxx&test=1&id=0000-5555-0000-0001
     this.ReadQueryString()
+
     if (this.Unicom.SetupConnection(this.ConnectionDetails) !== true) {
       console.log('Unicom connection not setup correctly')
     } else {
@@ -21,6 +22,8 @@ hcNS.Core = class {
   // constants
 
   // private variables
+
+  // Events
 
   // private functions
 
@@ -55,7 +58,26 @@ hcNS.Core = class {
     myApp.UX.UpdateSessionPanel(myApp.Unicom.SessionVariables)
   }
 
+  onReadyForResponse (theInstructions) {
+    theInstructions.after = theInstructions.source.onCompletedSubmission
+    if (theInstructions.response !== null) theInstructions.source.Unicom.SubmitResponseForAction(theInstructions)
+  }
+
+  onCompletedSubmission (theIsValid, theInstructions) {
+    console.log('completed this submission')
+  }
   // methods:
+
+  SubmitResponseForAction (theInstructions) {
+    theInstructions.after = theInstructions.source.onCompletedSubmission
+    this.Unicom.SubmitResponseForAction(theInstructions)
+  }
+
+  SubmitResponse (theInstructions) {
+    theInstructions.after = this.onReadyForResponse
+    theInstructions.source = this
+    this.Unicom.RequestActionFromIdle(theInstructions)
+  }
 }
 
 var myApp

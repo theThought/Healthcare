@@ -45,9 +45,9 @@ hcNS.Unicom = class {
     return true
   }
 
-  onResponseNextStep (theValidation, theSource, theNextAction) {
+  onResponseNextStep (theValidation, theInformation) {
     console.log('ready to perform next action')
-    theNextAction(theSource, this.LastXMLResponse)
+    theInformation.after(theInformation)
   }
 
   onResponseError (theError) {
@@ -80,7 +80,7 @@ hcNS.Unicom = class {
       console.log('the html did not parse correctly')
       return null
     }
-    theSlot = xmlContent
+    this.xmlTemplates[theSlot] = xmlContent
   }
 
   onXMLRequestError (theError) {
@@ -90,20 +90,18 @@ hcNS.Unicom = class {
   // Methods
 
   LoadXMLTemplates () {
-    var xmlTemplateSlot = this.xmlTemplates.requestquestionfromidle
     fetch ('RequestQuestion.xml', {
       method: 'GET'
     })
       .then(response => this.onXMLRequestResponse(response))
-      .then(xmlText => this.onXMLRequestParse(xmlText, xmlTemplateSlot))
+      .then(xmlText => this.onXMLRequestParse(xmlText, 'requestquestionfromidle'))
       .catch(error => this.onXMLRequestError(error))
 
-    xmlTemplateSlot = this.xmlTemplates.submitresponsefromaction
     fetch ('SubmitQuestion.xml', {
       method: 'GET'
     })
       .then(response => this.onXMLRequestResponse(response))
-      .then(xmlText => this.onXMLRequestParse(xmlText, xmlTemplateSlot))
+      .then(xmlText => this.onXMLRequestParse(xmlText, 'submitresponsefromaction'))
       .catch(error => this.onXMLRequestError(error))
   }
 
@@ -180,7 +178,7 @@ hcNS.Unicom = class {
       .then(response => this.onResponse(response))
       .then(xmlText => this.onResponseParse(xmlText))
       .then((isValid) => this.Parent.UX.onTransactionLogUpdate(isValid, this.LastXMLResponse))
-      .then(isValid => this.onResponseNextStep(isValid, theDetails.source, theDetails.after))
+      .then(isValid => this.onResponseNextStep(isValid, theDetails))
       .catch(error => this.onResponseError(error))
   }
 
@@ -216,9 +214,7 @@ hcNS.Unicom = class {
 
   SubmitResponseForAction (theInstructions) {
     // { type: 'Question', name: 'QuestionName', parameters: false, after: NextFuction }
-    const whatsNextJSON = this.BuildWhatsNextforBasicRequest('idle', true)
-    const bodyXML = this.BuildBodyForSubmissionFromAction(theInstructions, whatsNextJSON)
-
+    const content = this.BuildSubmitContent(theInstructions.name, theInstructions.response)
     // I.Engine={{EngineID}}&I.Session={{SessionID}}&I.Project=S2021211&I.SavePoint=Idle&I.Renderer=XMLPlayer&PlayerXml=
     const bodyContent = [
       'I.Engine=',
@@ -226,9 +222,11 @@ hcNS.Unicom = class {
       '&I.Session=',
       this.SessionVariables.session,
       '&I.Project=',
-      this.ConnectionDetails.project,
-      '&I.SavePoint=Idle&I.Renderer=XMLPlayer&PlayerXml=',
-      encodeURIComponent(bodyXML),
+      this.ProjectId,
+      '&I.SavePoint=',
+      theInstructions.name,
+      '&I.Renderer=XMLPlayer&PlayerXml=',
+      encodeURIComponent(content),
       '%0D%0A%09%09%09'
     ].join('')
 
@@ -245,24 +243,26 @@ hcNS.Unicom = class {
       .catch(error => this.onResponseError(error))
   }
 
-  BuildBodyForSubmissionFromAction (theInstructions, theWhatsNextJSON) {
-    const root = this.xmlTemplates.requestquestionfromidle.documentElement
+  BuildSubmitContent (theQuestion, theAnswer) {
+    //  <Page SavePoint="Gender" Project="s2021211"><Question QuestionName="@DynamicPage" QuestionFullName="@DynamicPage" QuestionType="Page"><Question QuestionName="Gender" QuestionFullName="Gender"><Response><Value>{Male}</Value></Response></Question><Question QuestionName="WhatsNext" QuestionFullName="WhatsNext" QuestionDataType="Text" MustAnswer="false"><Response><Value>{"WhatsNext":[{"Action":"Question","Name":"Idle","Parameters":""}]}</Value></Response></Question></Question><Navigation Type="Next" IsSelected="true" /></Page>
+
+    const root = this.xmlTemplates.submitresponsefromaction.documentElement
     const newNode = root.cloneNode(true)
 
     newNode.setAttribute('Project', this.ConnectionDetails.project)
+    newNode.setAttribute('SavePoint', theQuestion)
     const questionNodes = newNode.getElementsByTagName('Question')
-    const howManyQuestionNodes = questionNodes.length
-    for (var counter = 0; counter < howManyQuestionNodes; counter++) {
-      const currentNode = questionNodes[counter]
-      const questionName = currentNode.getAttribute('QuestionName')
-      if (questionName === 'WhatsNext') {
-        const responseNode = currentNode.childNodes[0]
-        const valueNode = responseNode.childNodes[0]
-        valueNode.textContent = theWhatsNextJSON
-      }
-    }
+
+    const questionNode = questionNodes[1]
+    questionNode.setAttribute('QuestionName', theQuestion)
+    questionNode.setAttribute('QuestionFullName', theQuestion)
+
+    const responseNode = questionNode.childNodes[0]
+    const valueNode = responseNode.childNodes[0]
+    valueNode.textContent = theAnswer
+
     const serializer = new XMLSerializer()
-    console.log('Request XML: ' + serializer.serializeToString(newNode))
+    console.log('Submit XML: ' + serializer.serializeToString(newNode))
     return serializer.serializeToString(newNode)
   }
 }
